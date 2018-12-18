@@ -1,0 +1,281 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>聊天室</title>
+<style type="text/css">
+	*{padding:0; margin:0;} 
+	body{
+    -moz-user-select:none;/*火狐*/
+    -webkit-user-select:none;/*webkit浏览器*/
+    -ms-user-select:none;/*IE10*/
+    -khtml-user-select:none;/*早期浏览器*/
+    user-select:none;
+	}
+	html,body{width:100%;height: 100%;} 
+	.clearfix{overflow:auto；zoom:1;} 
+	h1{ position:absolute;z-index:20; width: 315px; height:50px; line-height:50px; font-size:20px; left: -2px; top: 0; background: #000; color: #fff;margin: auto;}
+	
+	.chat-wrap{
+		position: relative;
+		width: 600px; 
+		height:733px;
+		/*overflow-y:scroll;*/
+		background:#e7e7e7; 
+		text-align:center; 
+		background: url(images/iphone.png) no-repeat ;
+		background-size: 60%;
+		background-position: center;
+		margin: auto;
+	} 
+	.chatroom{width:310px;height: 640px;
+	position: absolute;
+	left:144.5px;
+	top:95px;
+	 }
+	.chat-con{height: 425.5px; padding: 10px 0; background:#e7e7e7;width: 310px;margin: auto;margin-top:50px;overflow:hidden;
+	} 
+	.chat-con p{display:inline-block; padding:3px 6px; background:#999;border-radius:5px; color:#fff; margin:5px 0;font-size: 10px;} 
+	.bottom{bottom:0; left: 0; width:100%; height: 45px; background: #fff;} 
+	.bottom input{width: 78.5%; height: 40px; line-height: 50px; float:left;padding-bottom: 0;} 
+	.bottom button{width: 20%;height: 44px; float: right; border:none; background:#459d36;color: #fff;} 
+	.chat-item{width:100%; margin-bottom:20px;} 
+	.item-right .message{background: #62b900;} 
+	.item-left .message{background: #fff; margin-top:20px;} 
+	.item-left .img{margin-right:10px;} 
+	.item-left .uname{font-size:12px; left:50px; top:0;} 
+	.chat-item .message{width:60%;display:block; padding:10px;border-radius:5px; margin-right:10px;} 
+	/*.chat-item .img{display:inline-block; width:40px; height:40px; background:url(../images/user/user.jpg) no-repeat; background-size:100% 100%;} */
+	.chat-sender{
+      clear:both;
+      font-size: 80%;
+    }
+    .chat-sender div:nth-of-type(1){
+      float: left;
+    }
+    .chat-sender div:nth-of-type(2){
+      margin: 0 50px 2px 50px;
+      padding: 0px;
+      color: #848484;
+      font-size: 70%;
+      text-align: left;
+    }
+    .chat-sender div:nth-of-type(3){
+      background-color: white;
+      float: left;
+      margin: 0 10px;
+      max-width: 190px;
+      padding: 10px 10px 10px 10px;
+      border-radius:7px;
+      text-indent: -12px;
+      text-align: left;
+    }
+
+    .chat-receiver{
+      clear:both;
+      font-size: 80%;
+    }
+    .chat-receiver div:nth-of-type(1){
+      float: right;
+    }
+    .chat-receiver div:nth-of-type(2){
+      margin: 0px 50px 2px 50px;
+      padding: 0px;
+      color: #848484;
+      font-size: 70%;
+      text-align: right;
+    }
+    .chat-receiver div:nth-of-type(3){
+      float:right;
+      background-color: #b2e281;
+     /* margin: 0px 50px 10px 50px;*/
+      max-width: 190px;
+      margin: 0px 10px;
+      padding: 10px 10px 10px 10px;
+      border-radius:7px;
+      text-align: left;
+    }
+
+    .chat-receiver div:first-child img,
+    .chat-sender div:first-child img{
+      width: 40px;
+      height: 40px;
+      /*border-radius: 10%;*/
+    }
+
+    .chat-left_triangle{
+      height: 0px;
+      width: 0px;
+      border-width: 6px;
+      border-style: solid;
+      border-color: transparent white transparent transparent;
+      position: relative;
+      left: -22px;
+      top: 3px;
+    }
+    .chat-right_triangle{
+      height: 0px;
+      width: 0px;
+      border-width: 6px;
+      border-style: solid;
+      border-color: transparent transparent transparent #b2e281;
+      position: relative;
+      right:-22px;
+      top:3px;
+    }
+    #showFriend{
+    	color: white;
+    	background: none;
+    	border: none;
+    	margin-top: 15px;
+    	margin-right: 10px;
+    	float:right;
+    }
+</style>
+<script>
+	var posStart=null;
+	var posEnd=null;
+	var imgUrl="https://chat-1252419034.cos.ap-shanghai.myqcloud.com/images/p4.jpeg";
+	var ws=null;
+	var username="defaultName";
+	function showTime(){
+		var date=new Date();   
+		var h=date.getHours();
+		if(h<10)
+			h="0"+h;   
+		var m=date.getMinutes();
+		if(m<10)
+			m="0"+m;    
+		var s=date.getSeconds();
+		if(s<10)
+			s="0"+s;    
+		var d=document.getElementById("chatc"); 
+		var message=document.createElement("p");
+		message.innerHTML=''+h+':'+m+':'+s;
+		message.style.textAlign="center";
+		var line=document.createElement("div");
+		line.style="width:315px;float:left;";
+		line.appendChild(message);
+		d.appendChild(line);
+		//d.scrollTop=d.scrollHeight;
+	}
+	setInterval(showTime,60000);
+	function mdown(obj){
+		var e = event || window.event;
+    	var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+    	posStart=e.pageY || e.clientY + scrollY;
+	}
+	function mup(obj){
+		var e = event || window.event;
+    	var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+    	posEnd=e.pageY || e.clientY + scrollY;
+    	//console.log("ss");
+    	obj.scrollTop-=posEnd-posStart;
+    	console.log(obj.scrollTop);
+	}
+	function getMessage(){
+		var ws_url="ws://172.16.134.66:10086/ws/";
+		username=document.getElementById("usernameid").innerHTML;
+		console.log("here!");
+		ws=new WebSocket(ws_url+username);
+		ws.onmessage=function(msg){
+			msg=JSON.parse(msg.data);
+			console.log(msg.username);
+			if(msg.sender==username){
+				imgUrl=msg.img_url;
+				console.log(imgUrl);
+			}else{
+				console.log("hello world!");
+				showMessage('y',msg);
+			}
+		}
+	}
+	function showMessage(self,msg){
+		var divTag=document.createElement('div');
+		if(self=='m'){
+			divTag.classList.add("chat-receiver");
+			var divImg=document.createElement('div');
+			var myImg=document.createElement('img');
+			myImg.src=msg.img_url;
+			divImg.appendChild(myImg);
+			var divName=document.createElement('div');
+			divName.innerHTML=msg.sender;
+			var divLog=document.createElement('div');
+			var divTriangle=document.createElement('div');
+			divTriangle.classList.add("chat-right_triangle");
+			var spanContent=document.createElement('span');
+			spanContent.innerHTML=msg.content;
+			divLog.appendChild(divTriangle);
+			divLog.appendChild(spanContent);
+			divTag.appendChild(divImg);
+			divTag.appendChild(divName);
+			divTag.appendChild(divLog);
+		}else{
+			divTag.classList.add("chat-sender");
+			var divImg=document.createElement('div');
+			var myImg=document.createElement('img');
+			myImg.src=msg.img_url;
+			divImg.appendChild(myImg);
+			var divName=document.createElement('div');
+			divName.innerHTML=msg.sender;
+			var divLog=document.createElement('div');
+			var divTriangle=document.createElement('div');
+			divTriangle.classList.add("chat-left_triangle");
+			var spanContent=document.createElement('span');
+			spanContent.innerHTML=msg.content;
+			divLog.appendChild(divTriangle);
+			divLog.appendChild(spanContent);
+			divTag.appendChild(divImg);
+			divTag.appendChild(divName);
+			divTag.appendChild(divLog);
+		}
+		var d=document.getElementById("chatc"); 
+		var line=document.createElement("div");
+		line.appendChild(divTag);
+		line.style="height:50px;";
+		d.appendChild(line);
+	}
+	function mySendMessage() {
+        var send_msg=document.getElementById("sendtxt");
+        ws.send("{\"sender\":\""+username+"\",\"content\":\""+send_msg.value+"\"}");
+      	if(send_msg.value=="")return;
+        var s_msg =  {"sender":username,
+                    "content":send_msg.value,
+                    "img_url":imgUrl};
+        showMessage('m',s_msg);
+        send_msg.value='';
+        var temp=document.getElementById("chatc");
+        temp.scrollTop=temp.scrollHeight;
+    }
+    function EnterEvent(){        
+       if(event.keyCode==13){
+            mySendMessage();
+      	}
+      }
+	function showFriends(){
+		window.location.href="/friends";
+	}
+</script>
+</head>
+
+<body>
+	<div id="usernameid" style="display: none;">{{username}}</div>
+	<div class="chat-wrap">
+	<div class="chatroom"> 
+		<h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;多人聊天室<input type="button" id="showFriend" value="●●●" onclick="showFriends()" /></h1> 
+	<div class="chat-con" onmousedown="mdown(this)"  onmouseup="mup(this)" id="chatc"></div> 
+	<div class="bottom"> 
+	<input type="text" onkeydown="EnterEvent()" id="sendtxt"> 
+	<button id="btn-send">发送</button> 
+	</div> 
+	</div>
+	</div>
+</body>
+<script type="text/javascript">
+	var dict="{\"sender\":\"zhkgo\",\"content\":\"宠辱不惊，看庭前花开花落；去留无意，望天上云卷云舒\",\"img_url\":\"https://chat-1252419034.cos.ap-shanghai.myqcloud.com/images/p2.jpeg\"}"
+	showMessage("m",JSON.parse(dict));
+	var dict="{\"sender\":\"zhkgo\",\"content\":\"人类的本质是什么?\",\"img_url\":\"https://chat-1252419034.cos.ap-shanghai.myqcloud.com/images/p25.jpeg\"}"
+	getMessage();
+	document.getElementById("btn-send").addEventListener("click",mySendMessage);
+</script>
+</html>

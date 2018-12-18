@@ -1,0 +1,181 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>聊天室注册</title>
+<style type="text/css">
+	*{padding:0; margin:0;} 
+	span{
+		margin-top: -20px;
+		width:130px;
+		font-size: 13px;
+		color: #DF1115;
+		display: none;
+		text-align: left;
+	}
+	img{
+		padding-top:10px;
+		width: 80px;
+		height: 80px;
+	}
+
+	.login-wrap{background-color:#e7e7e7;
+				margin-top: 50px;
+				background: url("{{url_for('static',filename='images/iphone.png')}}") no-repeat;
+				text-align: center;
+				height: 733px;
+				width: 612px;
+				background-size: 60%;
+				background-position: center;
+				margin: auto;
+	}	
+	.login-con{padding-top: 100px;height: 500px;} 
+	.login-con h3{margin-bottom: 20px; padding-top: 10px;} 
+	.login-con input{width:244px; display:block; margin:0 auto; height: 30px; line-height: 30px; margin-bottom: 20px;} 
+	.login-con button{width:40%;
+		display:block; 
+		margin:0 auto; 
+		height: 40px; 
+		line-height:40px; 
+		border:none; 
+		background:#459d36; 
+		color:#fff; 
+		border-radius:7px;
+		margin-top:20px; }
+	button:active{color:red;
+				border: 2px solid #e7e7e7;
+	}
+	.tip{
+		height: 50px;
+		width: 244px;
+		margin: auto;
+	}
+	.alert{
+		height: 40px;
+		line-height: 40px;
+		width: 244px;
+		margin: auto;
+		background: #fff;
+		color:#fff;
+		font-family:微软雅黑;
+		font-size:15px;
+		border-radius: 7px;
+	}
+</style>
+<script type=text/javascript>
+	var ws=null;
+	function checkEmpty(obj){
+		if(!obj.value){
+			obj.nextSibling.style.display='block';
+		}else{
+			obj.nextSibling.style.display='none';
+		}
+	}
+	function checkLength(obj){
+		var length=document.getElementById('pwd').value.length;
+		if(!obj.value){
+			obj.nextSibling.style.display='block';
+		}else{
+			obj.nextSibling.style.display='none';
+		}
+		if(length>0&&length<6){
+			obj.nextSibling.style.display='block';
+			obj.nextSibling.innerText='*密码长度不足6位';
+		}
+		if(length>16){
+			obj.nextSibling.style.display='block';
+			obj.nextSibling.innerText='*密码长度超出16位';
+		}
+	}
+	function checkPwd(obj){
+		var pwd=document.getElementById('pwd').value;
+		var pwdAgain=obj.value;
+		if(pwd!=pwdAgain){
+			obj.nextSibling.style.display='block';
+		}else{
+			obj.nextSibling.style.display='none';
+		}
+	}
+	function disappear(){
+		var warning=document.getElementById('warning');
+		warning.style.background="#fff";
+	}
+	function gotoIndex(){
+		window.location.href="/";
+	}
+	function check(){
+		var user=document.getElementById('loginName').value;
+		var pwd=document.getElementById('pwd').value;
+		var pwdAgain=document.getElementById('pwdAgain').value;
+		var warning=document.getElementById('warning');
+		if(!user){
+			warning.style.background="#459d36";
+			warning.innerHTML="请输入昵称";
+			setTimeout(disappear,3000);
+			return;
+		}else if(user.length>16){
+			warning.style.background="#459d36";
+			warning.innerHTML="昵称长度超过16位";
+			setTimeout(disappear,3000);
+			return;
+		}else if(!pwd){
+			warning.style.background="#459d36";
+			warning.innerHTML="请设置密码";
+			setTimeout(disappear,3000);
+			return;
+		}else if(pwd.length>16){
+			warning.style.background="#459d36";
+			warning.innerHTML="密码长度超过16位";
+			setTimeout(disappear,3000);
+			return;
+		}else if(pwd!=pwdAgain){
+			warning.style.background="#459d36";
+			warning.innerHTML="两次密码不一致";
+			setTimeout(disappear,3000);
+			return;
+		}
+		var register_url="ws://172.16.134.66:10086/register/";
+		var username=document.getElementById("loginName").value;
+		var password=document.getElementById("pwd").value;
+		ws=new WebSocket(register_url+username+"/"+password);
+		ws.onmessage=function(msg){
+			str=msg.data;
+			if(str=="1"){
+				warning.style.background="#459d36";
+				warning.innerHTML="注册成功";
+				setTimeout(gotoIndex,1500);
+			}
+			else{
+				console.log(0);
+				warning.style.background="#459d36";
+				warning.innerHTML="注册失败";
+				setTimeout(disappear,3000);
+			}
+		}
+	}
+	
+	
+</script>
+</head>
+
+<body>
+<div class="login-wrap"> 
+ 	
+  	<div class="login-con">
+  	<div class="alert" id="warning"></div> 
+  	<img src="{{url_for('static',filename='images/zjweu1.png')}}">
+	<h3>欢迎新用户</h3> 
+	<div class="tip">
+	<input type="text" placeholder="请输入昵称" id="loginName" onblur="checkEmpty(this)"/><span>*用户名不为空</span>
+	</div>
+	<div class="tip">
+	<input type="password" placeholder="请设置密码" id="pwd" onblur="checkLength(this)"/><span>*密码不为空</span>
+	</div>
+	<div class="tip">
+	<input type="password" placeholder="请确认密码" id="pwdAgain" onblur="checkPwd(this)"/><span>*两次密码不一致</span>
+	</div>
+	<button class="login-btn" onClick="check()">注册</button> 
+</div> 
+</div> 
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>聊天室登录</title>
+<style type="text/css">
+	*{padding:0; margin:0;}
+	img{
+		padding-top:10px;
+		width: 80px;
+		height: 80px;
+	}
+
+	.login-wrap{background-color:#e7e7e7;
+				margin-top: 50px;
+				background: url("{{url_for('static',filename='images/iphone.png')}}") no-repeat;
+				text-align: center;
+				height: 733px;
+				width: 612px;
+				background-size: 60%;
+				background-position: center;
+				margin: auto;
+	}	
+	.login-con{padding-top: 100px;} 
+	.login-con h3{margin-bottom: 20px;} 
+	.login-con input{width:40%; display:block; margin:0 auto; height: 40px; line-height: 40px; margin-bottom: 20px;} 
+	.login-con button{width:40%;
+		display:block; 
+		margin:0 auto; 
+		height: 40px; 
+		line-height:40px; 
+		border:none; 
+		background:#459d36; 
+		color:#fff; 
+		border-radius:5px;
+		margin-top:20px; } 
+	.alert{
+		height: 40px;
+		line-height: 40px;
+		width: 244px;
+		margin: auto;
+		background: #fff;
+		color:#fff;
+		font-family:微软雅黑;
+		font-size:15px;
+		border-radius: 7px;
+	}
+
+</style>
+<script type="text/javascript">
+	var ws=null;
+	var username=null;
+	function disappear(){
+		var warning=document.getElementById('warning');
+		warning.style.background="#fff";
+	}
+	function gotoChatroom(username){
+		window.location.href="/chatroom/"+username;
+	}
+	function login(){
+		var login_url="ws://172.16.134.66:10086/login/";
+		username=document.getElementById("loginName").value;
+		var password=document.getElementById("password").value;
+		console.log("before");
+		var warning=document.getElementById('warning');
+		if(!username){
+			warning.style.background="#459d36";
+			warning.innerHTML="请输入用户名";
+			setTimeout(disappear,3000);
+		}else if(!password){
+			warning.style.background="#459d36";
+			warning.innerHTML="请输入密码";
+			setTimeout(disappear,3000);
+		}
+		ws = new WebSocket(login_url+username+"/"+password);
+		ws.onmessage=function(msg){
+			str=msg.data
+			if(str=="1"){
+				warning.style.background="#459d36";
+				warning.innerHTML="登录成功";
+				setTimeout("gotoChatroom(\""+username+"\")",1500);
+			}
+			else{
+				warning.style.background="459d36";
+				warning.innerHTML="登录失败";		
+				setTimeout(disappear,3000);
+			}
+		}
+	}
+	function register(){
+		window.location.href="/register";
+	}
+</script>
+</head>
+
+
+<body>
+<div class="login-wrap"> 
+  <div class="login-con">
+   <div class="alert" id="warning"></div> 
+    <img src="zjweu1.png">
+	<h3>用户登录</h3> 
+	<input type="text" placeholder="请输入昵称" id="loginName" /> 
+	<input type="password" placeholder="请输入密码" id="password" />
+	<button class="login-btn" onclick="login()">登录</button> 
+	<button class="login-btn" onclick="register()">注册</button> 
+</div> 
+</div> 
+</body>
+</html>
