@@ -58,10 +58,10 @@
 		window.location.href="/chatroom/"+username;
 	}
 	function login(){
-		var login_url="ws://172.16.134.66:10086/login/";
+		var login_url="ws://qingyimianmian.xyz:10086/login/";
 		username=document.getElementById("loginName").value;
 		var password=document.getElementById("password").value;
-		console.log("before");
+
 		var warning=document.getElementById('warning');
 		if(!username){
 			warning.style.background="#459d36";
@@ -73,6 +73,7 @@
 			setTimeout(disappear,3000);
 		}
 		ws = new WebSocket(login_url+username+"/"+password);
+		console.log(ws+"1");
 		ws.onmessage=function(msg){
 			str=msg.data
 			if(str=="1"){
@@ -81,6 +82,7 @@
 				setTimeout("gotoChatroom(\""+username+"\")",1500);
 			}
 			else{
+				console.log("before");
 				warning.style.background="459d36";
 				warning.innerHTML="登录失败";		
 				setTimeout(disappear,3000);

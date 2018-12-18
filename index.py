@@ -21,6 +21,7 @@ def registerPage():
 @app.route('/login/<username>/<password>')
 def login(username,password):
     user_socket=request.environ.get("wsgi.websocket")
+    print("I am in login")
     if not user_socket:
         return "请以WEBSOCKET方式连接"
     result="error"

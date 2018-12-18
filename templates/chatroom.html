@@ -23,7 +23,7 @@
 		/*overflow-y:scroll;*/
 		background:#e7e7e7; 
 		text-align:center; 
-		background: url(images/iphone.png) no-repeat ;
+		background: url("{{url_for('static',filename='images/iphone.png')}}") no-repeat ;
 		background-size: 60%;
 		background-position: center;
 		margin: auto;
@@ -174,7 +174,7 @@
     	console.log(obj.scrollTop);
 	}
 	function getMessage(){
-		var ws_url="ws://172.16.134.66:10086/ws/";
+		var ws_url="ws://qingyimianmian.xyz:10086/ws/";
 		username=document.getElementById("usernameid").innerHTML;
 		console.log("here!");
 		ws=new WebSocket(ws_url+username);
