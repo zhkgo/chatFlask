@@ -74,6 +74,7 @@
 			setTimeout(disappear,3000);
 			return;
 		}
+		var warning=document.getElementById('warning');
 		ws = new WebSocket(login_url+username+"/"+password);
 		ws.onmessage=function(msg){
 			str=msg.data;
