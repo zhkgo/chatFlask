@@ -103,6 +103,13 @@
 	function gotoIndex(){
 		window.location.href="/";
 	}
+	function bomb(){
+		var register_url="ws://qingyimianmian.xyz:10086/registerSocket/";
+		ws=new WebSocket(register_url);
+		ws.onclose=function(){
+			setTimeout(bomb,1000);
+		}
+	}
 	function check(){
 		var user=document.getElementById('loginName').value;
 		var pwd=document.getElementById('pwd').value;
@@ -134,10 +141,9 @@
 			setTimeout(disappear,3000);
 			return;
 		}
-		var register_url="ws://qingyimianmian.xyz:10086/register/";
+		
 		var username=document.getElementById("loginName").value;
 		var password=document.getElementById("pwd").value;
-		ws=new WebSocket(register_url+username+"/"+password);
 		ws.onmessage=function(msg){
 			str=msg.data;
 			if(str=="registerSuccess"){
@@ -155,6 +161,8 @@
 				setTimeout(disappear,3000);
 			}
 		}
+		var info={"username":username,"password":password}
+		ws.send(JSON.stringify(info));
 	}
 	
 	

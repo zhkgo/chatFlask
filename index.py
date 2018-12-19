@@ -53,13 +53,16 @@ def changepwd(username,oldpassword,newpassword):
         user_socket.send(result)
         print(e)
     return result
-@app.route('/register/<username>/<password>')
-def register(username,password):
+@app.route('/registerSocket/')
+def register():
 	user_socket=request.environ.get("wsgi.websocket")
 	if not user_socket:
 		return "请以WEBSOCKET方式连接"
 	result="error"
 	try:
+        msg=eval(user_socket.receive())
+        username=msg["username"]
+        password=msg["password"]
 		result=addUser(username,password)
 		user_socket.send(result)
 	except WebSocketError as e:
