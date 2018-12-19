@@ -112,12 +112,12 @@
 		var warning=document.getElementById('warning');
 		if(!user){
 			warning.style.background="#459d36";
-			warning.innerHTML="请输入昵称";
+			warning.innerHTML="请输入用户名";
 			setTimeout(disappear,3000);
 			return;
 		}else if(user.length>16){
 			warning.style.background="#459d36";
-			warning.innerHTML="昵称长度超过16位";
+			warning.innerHTML="用户名长度不应超过16位";
 			setTimeout(disappear,3000);
 			return;
 		}else if(!oldpwd){
@@ -141,7 +141,7 @@
 			setTimeout(disappear,3000);
 			return;
 		}
-		ws = new WebSocket(change_url+username+"/"+password);
+		ws = new WebSocket(change_url+user+"/"+oldpwd+"/"+pwd);
 		ws.onmessage=function(msg){
 			str=msg.data
 			if(str=="changeSuccess"){
