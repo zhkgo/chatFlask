@@ -13,7 +13,7 @@ img_dict={}
 def index():
     return render_template('loginPage.html')
 @app.route('/friends/<username>')
-def showFriends():
+def showFriends(username):
     return render_template("members.html",img_dict=img_dict,username=username);
 
 @app.route('/chatroom/<username>')
