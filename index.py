@@ -70,7 +70,7 @@ def wx(username):
     if not user_socket:
         return "请以WEBSOCKET方式连接"
     user_socket_dict[username]=user_socket
-    img_dict[username]=getImg()
+    img_dict[username]=img_dict.get(username,getImg())
     user_socket.send(json.dumps({"sender":username,"img_url":img_dict[username]}))
     while True:
         try:
