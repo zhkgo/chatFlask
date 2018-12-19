@@ -3,7 +3,7 @@ from flask import  Flask ,request,render_template
 from  geventwebsocket.websocket import WebSocket,WebSocketError
 from  geventwebsocket.handler import WebSocketHandler
 from  gevent.pywsgi import WSGIServer
-from baseFunction import checkUser,addUser,getImg
+from baseFunction import checkUser,addUser,getImg,changePassword
 import pymysql
 import json
 app = Flask(__name__)
@@ -12,9 +12,9 @@ img_dict={}
 @app.route('/')
 def index():
     return render_template('loginPage.html')
-@app.route('/friends/')
+@app.route('/friends/<username>')
 def showFriends():
-    return render_template("members.html",img_dict=img_dict);
+    return render_template("members.html",img_dict=img_dict,username=username);
 
 @app.route('/chatroom/<username>')
 def chatRoom(username):
@@ -37,7 +37,19 @@ def login(username,password):
     	print(e)
     print(result)
     return result
-
+@app.route('/change/<username>/<oldpassword>/<newpassword>')
+def changepwd(username,oldpassword,newpassword):
+    user_socket=request.environ.get("wsgi.websocket")
+    if not user_socket:
+        return "请以WEBSOCKET方式连接"
+    result="error"
+    try:
+        result=changePassword(username,oldpassword,newpassword)
+        user_socket.send(result)
+    except WebSocketError as e:
+        user_socket.send(result)
+        print(e)
+    return result
 @app.route('/register/<username>/<password>')
 def register(username,password):
 	user_socket=request.environ.get("wsgi.websocket")
@@ -65,7 +77,10 @@ def wx(username):
         try:
             user_msg=user_socket.receive()
             print(user_msg)
-            user_msg=eval(user_msg)
+            try:
+                user_msg=eval(user_msg)
+            except Exception as e:
+                print(e)
             for toname,usersocket in user_socket_dict.items():
                 result={
                     "sender":user_msg['sender'],
@@ -75,7 +90,10 @@ def wx(username):
                 if usersocket==user_socket:
                     continue
                 print(username)
-                usersocket.send(json.dumps(result))
+                try:
+                    usersocket.send(json.dumps(result))
+                except:
+                    user_socket_dict.pop(toname)
         except WebSocketError as e:
             user_socket_dict.pop(username)
             print(e)

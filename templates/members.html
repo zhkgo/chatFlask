@@ -35,7 +35,7 @@
 		/*overflow-y:scroll;*/
 		background:#e7e7e7; 
 		text-align:center; 
-		background: url(images/iphone.png) no-repeat ;
+		background: url("{{url_for('static',filename='images/iphone.png')}}") no-repeat ;
 		background-size: 60%;
 		background-position: center;
 		margin: auto;
@@ -67,9 +67,10 @@
 </head>
 
 <body>
+<div style="display: none;" id="username">{{username}}</div>
 <div class="chat-wrap">
 	<div class="chatroom">
-		<h1><input type="button" value="←" id="back"/><span>成员列表</span></h1>
+		<h1><input type="button" value="←" id="back" onclick="goBack()"/><span>成员列表</span></h1>
 		<div class="chat-con" onmousedown="mdown(this)"  onmouseup="mup(this)" id="chatc">
 		<!--<div class="member">
 			<div class="photo"><img src="zjweu.jpg"></div>
@@ -92,6 +93,10 @@
     	//console.log("ss");
     	obj.scrollTop-=posEnd-posStart;
     	console.log(obj.scrollTop);
+	}
+	function goBack(){
+		var username=document.getElementById("username").innerHTML;
+		window.location.href='/chatroom/'+username; 
 	}
 	function addMember(imageUrl,username){
 		var d=document.getElementById('chatc');
