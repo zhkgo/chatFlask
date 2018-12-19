@@ -59,11 +59,11 @@ def register():
 	if not user_socket:
 		return "请以WEBSOCKET方式连接"
 	result="error"
-	try:
+    try:
         msg=eval(user_socket.receive())
         username=msg["username"]
         password=msg["password"]
-		result=addUser(username,password)
+        result=addUser(username,password)
 		user_socket.send(result)
 	except WebSocketError as e:
 		print(e)
