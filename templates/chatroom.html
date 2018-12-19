@@ -237,6 +237,7 @@
 		line.appendChild(divTag);
 		line.style="height:50px;";
 		d.appendChild(line);
+        d.scrollTop=d.scrollHeight;
 	}
 	function mySendMessage() {
         var send_msg=document.getElementById("sendtxt");
@@ -247,8 +248,6 @@
       	if(send_msg.value=="")return;
         showMessage('m',s_msg);
         send_msg.value='';
-        var temp=document.getElementById("chatc");
-        temp.scrollTop=temp.scrollHeight;
     }
     function EnterEvent(){        
        if(event.keyCode==13){
