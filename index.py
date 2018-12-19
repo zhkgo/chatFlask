@@ -76,6 +76,7 @@ def wx(username):
         try:
             user_msg=user_socket.receive()
             print(user_msg)
+            print(user_socket_dict)
             try:
                 msg_dict=eval(user_msg)
             except Exception as e:
@@ -83,10 +84,7 @@ def wx(username):
             for toname,usersocket in user_socket_dict.items():
                 if usersocket==user_socket:
                     continue
-                try:
-                    usersocket.send(user_msg)
-                except:
-                    user_socket_dict.pop(toname)
+                usersocket.send(user_msg)
         except WebSocketError as e:
             user_socket_dict.pop(username)
             print(e)
