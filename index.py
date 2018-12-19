@@ -77,20 +77,14 @@ def wx(username):
             user_msg=user_socket.receive()
             print(user_msg)
             try:
-                user_msg=eval(user_msg)
+                msg_dict=eval(user_msg)
             except Exception as e:
                 print(e)
             for toname,usersocket in user_socket_dict.items():
-                result={
-                    "sender":user_msg['sender'],
-                    "content":user_msg['content'],
-                    "img_url":img_dict[username]
-                }
                 if usersocket==user_socket:
                     continue
-                print(username)
                 try:
-                    usersocket.send(json.dumps(result))
+                    usersocket.send(user_msg)
                 except:
                     user_socket_dict.pop(toname)
         except WebSocketError as e:
