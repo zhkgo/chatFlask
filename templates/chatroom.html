@@ -189,6 +189,9 @@
 				showMessage('y',msg);
 			}
 		}
+		ws.onclose=function(){
+			getMessage();
+		}
 	}
 	function showMessage(self,msg){
 		var divTag=document.createElement('div');
@@ -237,12 +240,12 @@
 	}
 	function mySendMessage() {
         var send_msg=document.getElementById("sendtxt");
-     
         ws.send("{\"sender\":\""+username+"\",\"content\":\""+send_msg.value+"\"}");
       	if(send_msg.value=="")return;
         var s_msg =  {"sender":username,
                     "content":send_msg.value,
                     "img_url":imgUrl};
+        var test={"send_user":"1","receive_user":"2","img":"3","text":"4"};
         showMessage('m',s_msg);
         send_msg.value='';
         var temp=document.getElementById("chatc");
