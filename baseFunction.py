@@ -23,11 +23,11 @@ def changePassword(username,oldPassword,newPassword):
 		cursor=db.cursor()
 		cursor.execute("use chatDB")
 		sql="select * from userInfo where username='%s'"%username
-		num=cursor.excute(sql)
+		num=cursor.execute(sql)
 		if num==0:
 			return "userNotExist"
 		sql="select * from userInfo where username='%s' and password='%s'"%(username,oldPassword)
-		num=cursor.excute(sql)
+		num=cursor.execute(sql)
 		if num==0:
 			return "passwordError"
 		sql="update userInfo set password='%s' where username='%s'"%(newPassword,username)
