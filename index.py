@@ -57,14 +57,14 @@ def changepwd(username,oldpassword,newpassword):
 def register():
     user_socket=request.environ.get("wsgi.websocket")
     if not user_socket:
-	return "请以WEBSOCKET方式连接"
+        return "请以WEBSOCKET方式连接"
     result="error"
     try:
         msg=eval(user_socket.receive())
         username=msg["username"]
         password=msg["password"]
         result=addUser(username,password)
-	user_socket.send(result)
+        user_socket.send(result)
     except WebSocketError as e:
         print(e)
     print(result)
