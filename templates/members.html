@@ -109,7 +109,7 @@
 		mem.appendChild(user);
 		d.appendChild(mem);
 	}
-	{% for username,imgUrl in image_dict.items() %}
+	{% for username,imgUrl in img_dict.items() %}
 		addMember("{{username}}","{{imgUrl}}");
 	{% endfor %}
 </script>
