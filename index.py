@@ -57,10 +57,9 @@ def register(username,password):
 		return "请以WEBSOCKET方式连接"
 	result="error"
 	try:
-		result=str(addUser(username,password))
+		result=addUser(username,password)
 		user_socket.send(result)
 	except WebSocketError as e:
-		user_socket.send("0")
 		print(e)
 	print(result)
 	return result

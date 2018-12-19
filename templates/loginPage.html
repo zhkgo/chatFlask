@@ -67,20 +67,22 @@
 			warning.style.background="#459d36";
 			warning.innerHTML="请输入用户名";
 			setTimeout(disappear,3000);
+			return;
 		}else if(!password){
 			warning.style.background="#459d36";
 			warning.innerHTML="请输入密码";
 			setTimeout(disappear,3000);
+			return;
 		}
 		ws = new WebSocket(login_url+username+"/"+password);
 		ws.onmessage=function(msg){
-			str=msg.data
+			str=msg.data;
+			console.log(str);
 			if(str=="loginSuccess"){
 				warning.style.background="#459d36";
 				warning.innerHTML="登录成功";
 				setTimeout("gotoChatroom(\""+username+"\")",1500);
-			}
-			else if(str=="loginFail"){
+			}else if(str=="loginFail"){
 				warning.style.background="459d36";
 				warning.innerHTML="用户名或密码错误";		
 				setTimeout(disappear,3000);

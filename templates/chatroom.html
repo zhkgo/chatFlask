@@ -237,6 +237,7 @@
 	}
 	function mySendMessage() {
         var send_msg=document.getElementById("sendtxt");
+     
         ws.send("{\"sender\":\""+username+"\",\"content\":\""+send_msg.value+"\"}");
       	if(send_msg.value=="")return;
         var s_msg =  {"sender":username,
