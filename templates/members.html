@@ -1,0 +1,117 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>member</title>
+<style type="text/css">
+	*{padding:0; margin:0;} 
+	body{
+    -moz-user-select:none;/*火狐*/
+    -webkit-user-select:none;/*webkit浏览器*/
+    -ms-user-select:none;/*IE10*/
+    -khtml-user-select:none;/*早期浏览器*/
+    user-select:none;
+	}
+	html,body{width:100%;height: 100%;} 
+	.clearfix{overflow:auto；zoom:1;} 
+	h1{position: absolute; z-index:20; width: 315px; height:50px; line-height:50px; font-size:20px; left: -2px; top: 0; background: #000; color: #fff;margin: auto;}
+	span{
+		margin-left:-50px; 
+	}
+	#back{
+		width: 50px;
+		border: none;
+		float: left;
+		background:#000000;
+		color: #fff;
+		font-size: 25px;
+		margin-top: 10px;
+		
+	}
+	.chat-wrap{
+		position: relative;
+		width: 600px; 
+		height:733px;
+		/*overflow-y:scroll;*/
+		background:#e7e7e7; 
+		text-align:center; 
+		background: url(images/iphone.png) no-repeat ;
+		background-size: 60%;
+		background-position: center;
+		margin: auto;
+	} 
+	.chatroom{width:310px;height: 540px;
+	position: absolute;
+	left:144.5px;
+	top:95px;
+	 }
+	.chat-con{height: 470px;background:#fff;width: 310px;margin-top: 50px;overflow:hidden;
+	} 
+	.member{border-bottom: 1px solid #e7e7e7;
+			height:43px;
+			text-align: left;
+			
+	}
+	.photo img{width: 40px;
+			   height: 40px;
+	}
+	.member div{float: left;
+				
+		
+	}
+	.name{line-height: 40px;
+			font-size: 25px;
+		margin-left: 10px;
+	}
+</style>
+</head>
+
+<body>
+<div class="chat-wrap">
+	<div class="chatroom">
+		<h1><input type="button" value="←" id="back"/><span>成员列表</span></h1>
+		<div class="chat-con" onmousedown="mdown(this)"  onmouseup="mup(this)" id="chatc">
+		<!--<div class="member">
+			<div class="photo"><img src="zjweu.jpg"></div>
+			<div class="name">xin</div>
+		</div>-->
+		</div> 
+	</div>
+</div>
+</body>
+<script>
+	function mdown(obj){
+		var e = event || window.event;
+    	var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+    	posStart=e.pageY || e.clientY + scrollY;
+	}
+	function mup(obj){
+		var e = event || window.event;
+    	var scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+    	posEnd=e.pageY || e.clientY + scrollY;
+    	//console.log("ss");
+    	obj.scrollTop-=posEnd-posStart;
+    	console.log(obj.scrollTop);
+	}
+	function addMember(imageUrl,username){
+		var d=document.getElementById('chatc');
+		var mem=document.createElement("div");
+		mem.classList.add("member");
+		var p=document.createElement("img")
+		p.src=imageUrl;
+		var pic=document.createElement("div");
+		pic.classList.add("photo");
+		var user=document.createElement("div");
+		user.classList.add("name");
+		user.innerHTML=username;
+		pic.appendChild(p);
+		mem.appendChild(pic);
+		mem.appendChild(user);
+		d.appendChild(mem);
+	}
+	{% for username,imgUrl in image_dict.items() %}
+		addMember("{{username}}","{{imgUrl}}");
+	{% endfor %}
+</script>
+
+</html>

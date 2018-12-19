@@ -12,6 +12,9 @@ img_dict={}
 @app.route('/')
 def index():
     return render_template('loginPage.html')
+@app.route('/friends/')
+def showFriends():
+    return render_template("members.html",img_dict);
 
 @app.route('/chatroom/<username>')
 def chatRoom(username):
