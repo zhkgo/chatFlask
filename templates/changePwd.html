@@ -21,7 +21,7 @@
 
 	.login-wrap{background-color:#e7e7e7;
 				margin-top: 50px;
-				background: url( images/iphone.png) no-repeat;
+				background: url("{{url_for('static',filename='images/iphone.png')}}") no-repeat;
 				text-align: center;
 				height: 733px;
 				width: 612px;
@@ -113,32 +113,32 @@
 		if(!user){
 			warning.style.background="#459d36";
 			warning.innerHTML="请输入昵称";
-			setTimeout(disappear,5000);
+			setTimeout(disappear,3000);
 			return;
 		}else if(user.length>16){
 			warning.style.background="#459d36";
 			warning.innerHTML="昵称长度超过16位";
-			setTimeout(disappear,5000);
+			setTimeout(disappear,3000);
 			return;
 		}else if(!oldpwd){
 			warning.style.background="#459d36";
 			warning.innerHTML="请输入旧密码";
-			setTimeout(disappear,5000);
+			setTimeout(disappear,3000);
 			return;
 		}else if(!pwd){
 			warning.style.background="#459d36";
 			warning.innerHTML="请设置新密码";
-			setTimeout(disappear,5000);
+			setTimeout(disappear,3000);
 			return;
 		}else if(pwd.length>16){
 			warning.style.background="#459d36";
 			warning.innerHTML="密码长度超过16位";
-			setTimeout(disappear,5000);
+			setTimeout(disappear,3000);
 			return;
 		}else if(pwd!=pwdAgain){
 			warning.style.background="#459d36";
 			warning.innerHTML="两次密码不一致";
-			setTimeout(disappear,5000);
+			setTimeout(disappear,3000);
 			return;
 		}
 		ws = new WebSocket(change_url+username+"/"+password);
@@ -147,18 +147,18 @@
 			if(str=="changeSuccess"){
 				warning.style.background="#459d36";
 				warning.innerHTML="修改成功";
-				setTimeout("goIndex()",1500);
+				setTimeout(goIndex,1500);
 			}
 			else if(str=="userNotExist"){
-				warning.style.background="459d36";
+				warning.style.background="#459d36";
 				warning.innerHTML="用户名不存在";		
 				setTimeout(disappear,3000);
 			}else if(str=="passwordError"){
-				warning.style.background="459d36";
+				warning.style.background="#459d36";
 				warning.innerHTML="密码错误";		
 				setTimeout(disappear,3000);
 			}else{
-				warning.style.background="459d36";
+				warning.style.background="#459d36";
 				warning.innerHTML="未知错误";		
 				setTimeout(disappear,3000);
 			}
@@ -173,7 +173,7 @@
  	
   	<div class="login-con">
   	<div class="alert" id="warning"></div> 
-  	<img src="zjweu1.png">
+  	<img src="{{url_for('static',filename='images/zjweu1.png')}}">
 	<h3>修改密码</h3> 
 	<div class="tip">
 	<input type="text" placeholder="请输入用户名" id="loginName" onblur="checkEmpty(this)"/><span>*用户名不为空</span>

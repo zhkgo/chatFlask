@@ -37,6 +37,9 @@ def login(username,password):
     	print(e)
     print(result)
     return result
+@app.route('/changePwd/')
+def changePage():
+    return render_template("changePwd.html")
 @app.route('/change/<username>/<oldpassword>/<newpassword>')
 def changepwd(username,oldpassword,newpassword):
     user_socket=request.environ.get("wsgi.websocket")
