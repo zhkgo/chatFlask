@@ -190,8 +190,8 @@
 			}
 		}
 		ws.onclose=function(){
-			getMessage();
-		}
+			setInterval(getMessage,500);
+		} 
 	}
 	function showMessage(self,msg){
 		var divTag=document.createElement('div');
@@ -256,7 +256,8 @@
       	}
       }
 	function showFriends(){
-		window.location.href="/friends";
+		//username=document.getElementById("usernameid");
+		window.location.href="/friends/"+username;
 	}
 </script>
 </head>
