@@ -22,7 +22,7 @@ def changePassword(username,oldPassword,newPassword):
 		db=pymysql.connect(host='localhost',user='chatUser',password='111111',port=3306,charset='utf8')
 		cursor=db.cursor()
 		cursor.execute("use chatDB")
-		sql="select * from userInfo where username='%s'"
+		sql="select * from userInfo where username='%s'"%username
 		num=cursor.excute(sql)
 		if num==0:
 			return "userNotExist"
@@ -35,6 +35,7 @@ def changePassword(username,oldPassword,newPassword):
 		db.commit()
 		return "changeSuccess"		
 	except Exception as e:
+		print(e)
 		return "UnknowError"
 	finally:
 		db.close()
