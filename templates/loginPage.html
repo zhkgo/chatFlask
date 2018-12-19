@@ -45,8 +45,13 @@
 		font-size:15px;
 		border-radius: 7px;
 	}
-	.bottom{padding-top: 200px; 
-			color:#867C7C；
+	.bottom{display: block;
+			margin-top: 100px;
+			color:#867C7C;
+			text-decoration:none;
+	}
+	.bottom:hover{
+		color: red;
 	}
 
 </style>
@@ -114,8 +119,8 @@
 	<input type="password" placeholder="请输入密码" id="password" />
 	<button class="login-btn" onclick="login()">登录</button> 
 	<button class="login-btn" onclick="register()">注册</button> 
+	<a class="bottom" href="/changePwd">修改密码</a>
 </div> 
-	 <div class="bottom">修改密码</div>
 </div> 
 </body>
 </html>

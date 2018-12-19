@@ -89,6 +89,6 @@ def wx(username):
             user_socket_dict.pop(username)
             print(e)
             break
-
+    return "end"
 http_serve=WSGIServer(("0.0.0.0",10086),app,handler_class=WebSocketHandler)
 http_serve.serve_forever()
