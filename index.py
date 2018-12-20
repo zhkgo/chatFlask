@@ -46,7 +46,7 @@ def login():
 def changePage():
     return render_template("changePwd.html")
 @app.route('/change/')
-def changepwd(username,oldpassword,newpassword):
+def changepwd():
     print("I am in changepwd")
     user_socket=request.environ.get("wsgi.websocket")
     if not user_socket:
@@ -106,7 +106,10 @@ def wx(username):
             for toname,usersocket in user_socket_dict.items():
                 if usersocket==user_socket:
                     continue
-                usersocket.send(user_msg)
+                try:
+                    usersocket.send(user_msg)
+                except:
+                    user_socket_dict.pop(toname)
         except WebSocketError as e:
             user_socket_dict.pop(username)
             print(e)
