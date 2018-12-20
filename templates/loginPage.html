@@ -65,11 +65,17 @@
 	function gotoChatroom(username){
 		window.location.href="/chatroom/"+username;
 	}
-	function login(){
+	function bomb(){
 		var login_url="ws://qingyimianmian.xyz:10086/login/";
+		ws = new WebSocket(login_url);
+		ws.onclose=function(){
+			setTimeout(bomb,1000);
+		}
+	}
+	bomb();
+	function login(){
 		username=document.getElementById("loginName").value;
 		var password=document.getElementById("password").value;
-
 		var warning=document.getElementById('warning');
 		if(!username){
 			warning.style.background="#459d36";
@@ -82,7 +88,6 @@
 			setTimeout(disappear,3000);
 			return;
 		}
-		ws = new WebSocket(login_url+username+"/"+password);
 		ws.onmessage=function(msg){
 			str=msg.data;
 			console.log(str);
@@ -101,6 +106,8 @@
 				setTimeout(disappear,3000);
 			}
 		}
+		info={"username":username,"password":password};
+		ws.send(JSON.stringify(info));
 	}
 	function register(){
 		window.location.href="/register";

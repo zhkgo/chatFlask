@@ -63,6 +63,15 @@
 	}
 </style>
 <script type="text/javascript">
+	var ws=null;
+	function bomb(){
+		var change_url="ws://qingyimianmian.xyz:10086/change/";
+		ws = new WebSocket(change_url);
+		ws.onclose=function(){
+			setTimeout(bomb,1000);
+		}
+	}
+	bomb();
 	function checkEmpty(obj){
 		if(!obj.value){
 			obj.nextSibling.style.display='block';
@@ -103,8 +112,6 @@
 		window.location.href="/";
 	}
 	function check(){
-		var ws=null;
-		var change_url="ws://qingyimianmian.xyz:10086/change/";
 		var user=document.getElementById('loginName').value;
 		var oldpwd=document.getElementById('oldpwd').value;
 		var pwd=document.getElementById('pwd').value;
@@ -130,9 +137,9 @@
 			warning.innerHTML="请设置新密码";
 			setTimeout(disappear,3000);
 			return;
-		}else if(pwd.length>16){
+		}else if(pwd.length<6||pwd.length>16){
 			warning.style.background="#459d36";
-			warning.innerHTML="密码长度超过16位";
+			warning.innerHTML="密码长度不正确";
 			setTimeout(disappear,3000);
 			return;
 		}else if(pwd!=pwdAgain){
@@ -141,7 +148,6 @@
 			setTimeout(disappear,3000);
 			return;
 		}
-		ws = new WebSocket(change_url+user+"/"+oldpwd+"/"+pwd);
 		ws.onmessage=function(msg){
 			str=msg.data
 			if(str=="changeSuccess"){
@@ -163,8 +169,11 @@
 				setTimeout(disappear,3000);
 			}
 		}
+		info={"username":user,"oldpassword":oldpwd,"newpassword":pwd};
+		ws.send(JSON.stringify(info));
 	}
-		
+				
+
 </script>
 </head>
 

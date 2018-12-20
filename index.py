@@ -22,39 +22,52 @@ def chatRoom(username):
 @app.route("/register/")
 def registerPage():
     return render_template("register.html")
-@app.route('/login/<username>/<password>')
-def login(username,password):
-    user_socket=request.environ.get("wsgi.websocket")
+@app.route('/login/')
+def login():
     print("I am in login")
+    user_socket=request.environ.get("wsgi.websocket")
     if not user_socket:
         return "请以WEBSOCKET方式连接"
     result="error"
     try:
-    	result=str(checkUser(username,password))
-    	user_socket.send(result)
+        msg=eval(user_socket.receive())
+        username=msg["username"]
+        password=msg["password"]
+        result=checkUser(username,password)
+        user_socket.send(result)
     except WebSocketError as e:
-    	user_socket.send("0")
-    	print(e)
+        user_socket.send(result)
+        print(e)
+    except Exception as e:
+        pass
     print(result)
     return result
 @app.route('/changePwd/')
 def changePage():
     return render_template("changePwd.html")
-@app.route('/change/<username>/<oldpassword>/<newpassword>')
+@app.route('/change/')
 def changepwd(username,oldpassword,newpassword):
+    print("I am in changepwd")
     user_socket=request.environ.get("wsgi.websocket")
     if not user_socket:
         return "请以WEBSOCKET方式连接"
     result="error"
     try:
+        msg=eval(user_socket.receive())
+        username=msg["username"]
+        oldpassword=msg["oldpassword"]
+        newpassword=msg["newpassword"]
         result=changePassword(username,oldpassword,newpassword)
         user_socket.send(result)
     except WebSocketError as e:
         user_socket.send(result)
         print(e)
+    except Exception as e:
+        pass
     return result
 @app.route('/registerSocket/')
 def register():
+    print('I am in registerSocket')
     user_socket=request.environ.get("wsgi.websocket")
     if not user_socket:
         return "请以WEBSOCKET方式连接"
@@ -66,7 +79,10 @@ def register():
         result=addUser(username,password)
         user_socket.send(result)
     except WebSocketError as e:
+        user_socket.send(result)
         print(e)
+    except Exception as e:
+        pass
     print(result)
     return result
 
