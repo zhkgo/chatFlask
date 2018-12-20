@@ -265,7 +265,7 @@
 	<div id="usernameid" style="display: none;">{{username}}</div>
 	<div class="chat-wrap">
 	<div class="chatroom"> 
-		<h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;多人聊天室<input type="button" id="showFriend" value="●●●" onclick="showFriends()" /></h1> 
+		<h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;激情聊天室<input type="button" id="showFriend" value="●●●" onclick="showFriends()" /></h1> 
 	<div class="chat-con" onmousedown="mdown(this)"  onmouseup="mup(this)" id="chatc"></div> 
 	<div class="bottom"> 
 	<input type="text" onkeydown="EnterEvent()" id="sendtxt"> 
@@ -275,9 +275,11 @@
 	</div>
 </body>
 <script type="text/javascript">
-	var dict="{\"sender\":\"zhkgo\",\"content\":\"宠辱不惊，看庭前花开花落；去留无意，望天上云卷云舒\",\"img_url\":\"https://chat-1252419034.cos.ap-shanghai.myqcloud.com/images/p2.jpeg\"}"
-	showMessage("m",JSON.parse(dict));
-	var dict="{\"sender\":\"zhkgo\",\"content\":\"人类的本质是什么?\",\"img_url\":\"https://chat-1252419034.cos.ap-shanghai.myqcloud.com/images/p25.jpeg\"}"
+	var dict={"sender":"zhkgo","content":"欢迎来到激情聊天室！","img_url":"https://chat-1252419034.cos.ap-shanghai.myqcloud.com/images/p2.jpeg"}
+	showMessage("y",dict);
+	showTime();
+	dict={"sender":"zhkgo","content":"人类的本质是什么？","img_url":"https://chat-1252419034.cos.ap-shanghai.myqcloud.com/images/p2.jpeg"};
+	showMessage("y",dict);
 	getMessage();
 	document.getElementById("btn-send").addEventListener("click",mySendMessage);
 </script>

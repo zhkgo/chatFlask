@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pymysql
 import random
+
 def checkUser(username,password):
 	try:
 		db=pymysql.connect(host='localhost',user='chatUser',password='111111',port=3306,charset='utf8')
@@ -61,8 +62,6 @@ def addUser(username,password):
 		return "UnknowError"
 	finally:
 		db.close()
-
-
 def getImg():
 	k=random.randint(1,31)
 	return "https://chat-1252419034.cos.ap-shanghai.myqcloud.com/images/p%s.jpeg"%k
